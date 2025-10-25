@@ -1,4 +1,4 @@
-# untainted has been archived. [Learn more here.](https://scratch.mit.edu/discuss/post/6397247/)
+# untainted
 
 <img width="1500" alt="untainted' banner" src="https://user-images.githubusercontent.com/86574651/147876286-e0f179a9-b456-4c82-b672-380c0a30da3f.png">
 
@@ -10,7 +10,7 @@
   <a href="https://www.producthunt.com/posts/untainted?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-untainted" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=322567&theme=light" alt="untainted - A private, fast, and beautiful web browser | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 </p>
 
-untainted is a private, fast, and beautiful web browser that's created with Electron and styled with Tailwind CSS. Enjoy a clean and unique experience while surfing the web.
+untainted is a isolated, fast, and beautiful web browser that's created with Electron and styled with Tailwind CSS. Enjoy a clean and unique experience while surfing the web.
 
 In this age where many browsers track their users, it's nice to have a break from telemetry and browse privately. untainted never collects any data, and is 100% telemetry free!
 
