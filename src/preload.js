@@ -1,6 +1,12 @@
 // Preload to align environment with a typical Chrome browser for bot challenges
 (() => {
   try {
+    const { contextBridge, ipcRenderer } = require('electron');
+    contextBridge.exposeInMainWorld('untApi', {
+      updateSettings: (settings) => ipcRenderer.send('settings-update', settings),
+      clearSiteData: (domain) => ipcRenderer.invoke('clear-site-data', domain),
+    });
+    return;
     // navigator.webdriver -> false
     Object.defineProperty(navigator, 'webdriver', {
       get: () => false,

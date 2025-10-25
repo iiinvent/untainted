@@ -37,7 +37,7 @@ omnibox.addEventListener('keydown', (e) => {
       if (val.startsWith('http://') || val.startsWith('https://')) {
         view.loadURL(val);
       } else {
-        view.loadURL('http://'+ val);
+        view.loadURL('https://'+ val);
       }
     } else {
       const searchurlValue = localStorage.getItem('searchurl');
@@ -179,6 +179,21 @@ click('settings-done', saveSettings);
 
 
 click('settings-cancel', hideSettings);
+
+
+const clearBtn = byId('settings-clear-domain-btn');
+if (clearBtn) {
+  clearBtn.addEventListener('click', async () => {
+    const input = byId('settings-clear-domain');
+    const domain = input ? (input.value || '').trim() : '';
+    if (!domain) return;
+    try {
+      if (window.untApi && typeof window.untApi.clearSiteData === 'function') {
+        await window.untApi.clearSiteData(domain);
+      }
+    } catch (_) {}
+  });
+}
 
 
 click('offline-retry', () => {

@@ -102,6 +102,13 @@ function createTab(url) {
   view.classList.add('view');
   view.allowpopups = 'allowpopups';
   view.webpreferences = 'nativeWindowOpen=true';
+  // Attach webview preload to allow optional spoofing when enabled
+  try {
+    view.setAttribute('preload', './webview-preload.js');
+  } catch (_) {
+    // Fallback property set (older Electron)
+    view.preload = './webview-preload.js';
+  }
   const uaValue = localStorage.getItem('ua');
   if (uaValue) {
     view.useragent = uaValue;
@@ -150,16 +157,22 @@ function openSettings() {
   const searchurlElement = byId('settings-searchurl');
   const homepageElement = byId('settings-homepage');
   const uaElement = byId('settings-ua');
+  const fingerprintElement = byId('settings-fingerprint');
+  const logDomainElement = byId('settings-log-domain');
   const openInNewTabElement = byId('settings-open-in-new-tab');
   const searchUrlValue = localStorage.getItem('searchurl');
   const homePageValue = localStorage.getItem('homepage');
   const uaValue = localStorage.getItem('ua');
+  const fingerprintMode = localStorage.getItem('fingerprintMode') || 'real';
+  const logDomain = localStorage.getItem('logDomain') || '';
   const openInNewTab = localStorage.getItem('openInNewTab');
 
   searchurlElement.value = searchUrlValue;
   homepageElement.value = homePageValue;
   uaElement.value = uaValue;
   uaElement.placeholder = 'untainted/' + version;
+  fingerprintElement.value = fingerprintMode;
+  logDomainElement.value = logDomain;
   openInNewTabElement.checked = openInNewTab === 'true';
 
   settings.style.display = 'block';
@@ -179,12 +192,26 @@ function saveSettings() {
   const searchurlElement = byId('settings-searchurl');
   const homepageElement = byId('settings-homepage');
   const uaElement = byId('settings-ua');
+  const fingerprintElement = byId('settings-fingerprint');
+  const logDomainElement = byId('settings-log-domain');
   const openInNewTabElement = byId('settings-open-in-new-tab');
 
   localStorage.setItem('searchurl', searchurlElement.value);
   localStorage.setItem('homepage', homepageElement.value);
   localStorage.setItem('ua', uaElement.value);
+  localStorage.setItem('fingerprintMode', fingerprintElement.value || 'real');
+  localStorage.setItem('logDomain', logDomainElement.value || '');
   localStorage.setItem('openInNewTab', openInNewTabElement.checked);
+
+  // Notify main process of updated settings (if IPC bridge available)
+  try {
+    if (window.untApi && typeof window.untApi.updateSettings === 'function') {
+      window.untApi.updateSettings({
+        fingerprintMode: fingerprintElement.value || 'real',
+        logDomain: logDomainElement.value || ''
+      });
+    }
+  } catch (_) {}
 }
 
 

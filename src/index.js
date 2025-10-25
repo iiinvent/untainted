@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session } = require('electron');
+const { app, BrowserWindow, session, ipcMain } = require('electron');
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -9,11 +9,6 @@ if (process.platform === 'win32') {
     }
   } catch (_) {}
 }
-
-// Prefer consistent locale for headers
-app.commandLine.appendSwitch('lang', 'en-US');
-// Disable AutomationControlled flag often checked by bot detectors
-app.commandLine.appendSwitch('disable-blink-features', 'AutomationControlled');
 
 const chromeVersion = process.versions.chrome || '121.0.0.0';
 const REAL_UA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36`;
@@ -53,14 +48,38 @@ app.whenReady().then(() => {
     try { ses.setUserAgent(REAL_UA, 'en-US,en;q=0.9'); } catch (_) {}
   }
 
-  ses.webRequest.onBeforeSendHeaders((details, callback) => {
-    const h = details.requestHeaders;
-    h['User-Agent'] = REAL_UA;
-    if (!h['Accept-Language']) h['Accept-Language'] = 'en-US,en;q=0.9';
-    h['Sec-CH-UA'] = `"Chromium";v="${chromeVersion.split('.')[0]}", "Not;A=Brand";v="8", "Google Chrome";v="${chromeVersion.split('.')[0]}"`;
-    h['Sec-CH-UA-Platform'] = '"macOS"';
-    h['Sec-CH-UA-Mobile'] = '?0';
-    callback({ requestHeaders: h });
+  // Dynamic webRequest listeners controlled by settings
+  let logDomain = '';
+  let fingerprintMode = 'real';
+
+  const headerLogger = (details, callback) => {
+    const url = new URL(details.url);
+    if (logDomain && url.hostname.endsWith(logDomain)) {
+      try { console.log('[Headers]', url.hostname, details.requestHeaders); } catch (_) {}
+    }
+    callback({ requestHeaders: details.requestHeaders });
+  };
+  // attach once
+  try { ses.webRequest.onBeforeSendHeaders(headerLogger); } catch (_) {}
+
+  // Settings from renderer
+  ipcMain.on('settings-update', (_event, settings = {}) => {
+    if (typeof settings.fingerprintMode === 'string') {
+      fingerprintMode = settings.fingerprintMode === 'spoofed' ? 'spoofed' : 'real';
+    }
+    if (typeof settings.logDomain === 'string') {
+      logDomain = settings.logDomain.trim();
+    }
+  });
+
+  ipcMain.handle('get-fingerprint-mode', () => fingerprintMode);
+  ipcMain.handle('clear-site-data', async (_event, domain) => {
+    if (!domain || typeof domain !== 'string') return false;
+    try {
+      await ses.clearStorageData({ origin: `https://${domain}` });
+      await ses.clearStorageData({ origin: `http://${domain}` });
+      return true;
+    } catch (_) { return false; }
   });
 });
 

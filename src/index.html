@@ -56,6 +56,26 @@
         <p class="mb-2 font-bold text-gray-700">User agent</p>
         <input id="settings-ua" type="text" placeholder="Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" class="bg-indigo-50 text-indigo-500 rounded-full outline-none text-sm px-4 py-0.5 mb-8 transition hover:bg-indigo-100 placeholder:text-indigo-400 w-full">
 
+        <!-- Fingerprint mode -->
+        <p class="mb-2 font-bold text-gray-700">Fingerprint</p>
+        <select id="settings-fingerprint" class="appearance-none px-4 py-0.5 rounded-full bg-indigo-500 text-white font-bold outline-none text-sm mb-8">
+          <option class="text-sm text-gray-700 bg-white" value="real">Real (recommended)</option>
+          <option class="text-sm text-gray-700 bg-white" value="spoofed">Spoofed</option>
+        </select>
+
+        <!-- Header logging -->
+        <p class="mb-2 font-bold text-gray-700">Log request headers for domain</p>
+        <div class="flex items-center mb-8 space-x-2">
+          <input id="settings-log-domain" type="text" placeholder="example.com (leave empty to disable)" class="bg-indigo-50 text-indigo-500 rounded-full outline-none text-sm px-4 py-0.5 transition hover:bg-indigo-100 placeholder:text-indigo-400 w-full">
+        </div>
+
+        <!-- Clear site data -->
+        <p class="mb-2 font-bold text-gray-700">Clear site data for domain</p>
+        <div class="flex items-center mb-8 space-x-2">
+          <input id="settings-clear-domain" type="text" placeholder="example.com" class="bg-indigo-50 text-indigo-500 rounded-full outline-none text-sm px-4 py-0.5 transition hover:bg-indigo-100 placeholder:text-indigo-400 w-full">
+          <button id="settings-clear-domain-btn" class="px-4 py-1 font-bold text-white transition bg-red-500 rounded-md hover:bg-red-600">Clear</button>
+        </div>
+
         <!-- Open bookmarks in new tab -->
         <div class="flex mb-8">
           <p class="font-bold text-gray-700">Open bookmarks in a new tab</p>

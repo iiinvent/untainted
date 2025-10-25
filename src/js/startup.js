@@ -3,6 +3,14 @@ fetch('../package.json')
   .then(res => {
     version = res.version;
     createTab();
+    // Initialize main-process settings from stored values
+    try {
+      const fingerprintMode = localStorage.getItem('fingerprintMode') || 'real';
+      const logDomain = localStorage.getItem('logDomain') || '';
+      if (window.untApi && typeof window.untApi.updateSettings === 'function') {
+        window.untApi.updateSettings({ fingerprintMode, logDomain });
+      }
+    } catch (_) {}
     fetch('https://api.github.com/repos/iiinvent/untainted/releases/latest')
       .then(res => res.json())
       .then(res => {
