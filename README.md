@@ -17,21 +17,28 @@ In this age where many browsers track their users, it's nice to have a break fro
 New things are constantly being added to untainted, so be on the lookout for new releases. You can view some features and fixes that are in the works on [this board](https://github.com/iiinvent/untainted/projects/1).
 
 ## Screenshots
-![image](https://user-images.githubusercontent.com/86574651/158018722-68023be6-b8a4-43b8-b1c9-16bdf886c744.png)
+![image](./images/splash.png)
 
-![image](https://user-images.githubusercontent.com/86574651/158018748-45ddc408-30b9-4baf-8ee0-4cad28fdbd48.png)
+![image](./images/browser.png)
+
+![image](./images/settings.png)
 
 ## Development
 ```bash
+# Prerequisites
+- Node.js (>= 20.11.0)
+- npm (>= 10.11.0)
+- pnpm (>= 9.16.0)
+
 # Clone the repo
 git clone https://github.com/iiinvent/untainted.git
 cd untainted
 
 # Install the dependencies
-npm install
+pnpm install
 
 # Start the app
-npm run dev
+pnpm dev
 # This runs `npm start` and `npm run tailwind` concurrently
 ```
 
@@ -42,10 +49,10 @@ git clone https://github.com/iiinvent/untainted.git
 cd untainted
 
 # Install the dependencies
-npm install
+pnpm install
 
 # Make the app
-npm run make
+pnpm make
 
 # The built app should be located at `./out/make/{filetype}/{architecture}/{filename}.{filetype}`
 # Eg. `./out/make/deb/arm64/untainted_1.0.0_arm64.deb`
