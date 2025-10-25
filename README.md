@@ -1,6 +1,6 @@
 # untainted
 
-<img width="1500" alt="untainted' banner" src="https://user-images.githubusercontent.com/86574651/147876286-e0f179a9-b456-4c82-b672-380c0a30da3f.png">
+<img width="1500" alt="untainted' banner" src="./images/banner.png">
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/iiinvent/untainted?style=for-the-badge">
